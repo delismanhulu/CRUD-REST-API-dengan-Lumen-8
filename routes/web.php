@@ -10,4 +10,9 @@ $router->group(['prefix' => 'v1'], function () use ($router) {
     $router->post('/biodata/{id}', 'BiodataController@update');
     $router->delete('/biodata/{id}', 'BiodataController@delete');
     
+
+    $router->get('/api_covid', 'ApiController@index');
+    
+
+
 });
