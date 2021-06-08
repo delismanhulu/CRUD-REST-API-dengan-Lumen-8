@@ -8,37 +8,18 @@ use Illuminate\Support\Facades\Validator;
 
 class BiodataController extends Controller
 {
-    // get data
+    
     public function index() 
     {
         $data = Biodata::latest()->get();
-        // $data = Biodata::latest()->where('id','22')->get();
         return response()->json([
             'success' => true,
-            'message' =>'Data Kosong',
+            'message' =>'Data Biodata',
             'data'    => $data
         ], 200);
     }
 
-    // buat detail
-    public function show($id)
     
-    {
-        $biodata = Biodata::find($id);
-        if ($biodata) {
-            return response()->json([
-                'success'   => true,
-                'message'   => 'Detail biodata!',
-                'data'      => $biodata
-            ], 200);
-
-        } else {
-            return response()->json([
-                'success' => false,
-                'message' => 'Data Tidak ditemukan',
-            ], 404);
-        }
-    }
 
     // simpan
     public function store(Request $request)
@@ -92,12 +73,13 @@ class BiodataController extends Controller
             ],401);
 
         } else {
-            $biodata = Biodata::whereId($id)->update([
+            $data = Biodata::where('id', $id)->update([
                 'nama_lengkap'  => $request->input('nama_lengkap'),
                 'alamat'        => $request->input('alamat'),
             ]);
-
-            if ($biodata) {
+            // untuk menampikan data yang sudah di edit
+            $biodata = Biodata::where('id', $id)->get();
+            if ($data) {
                 return response()->json([
                     'success' => true,
                     'message' => 'Data Berhasil di update',
@@ -108,10 +90,32 @@ class BiodataController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => 'biodata Gagal Diupdate!',
+                    
                 ], 400);
             }
         }
     }
+
+    // buat detail
+    public function show($id)
+    
+    {
+        $biodata = Biodata::find($id);
+        if ($biodata) {
+            return response()->json([
+                'success'   => true,
+                'message'   => 'Detail biodata!',
+                'data'      => $biodata
+            ], 200);
+
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data Tidak ditemukan',
+            ], 404);
+        }
+    }
+    
 
     public function delete($id)
     {
